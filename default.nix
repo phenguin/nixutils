@@ -3,10 +3,10 @@ with nixpkgs; with builtins;
 nixpkgs // rec {
   ifFlagThen = b: vals: if b then vals else [];
   mkDev = attrs@{pyDev ? false, jsDev ? false, editors ? true,...}: stdenv.mkDerivation (attrs // (with attrs; rec {
-    buildInputs = ifFlagThen pyDev (with nixpkgs.python27Packages; [ python jedi elpy pip ipython ]) ++
+    buildInputs = ifFlagThen pyDev (with nixpkgs.python27Packages; [ python jedi elpy pip ipython ipdb ]) ++
                   ifFlagThen jsDev [ nodejs ] ++
                   ifFlagThen editors [ emacs vim ] ++
-                  [ zsh fasd git tmux procps ] ++ attrs.buildInputs;
+                  [ less sudo zsh fasd silver-searcher git tmux procps ] ++ attrs.buildInputs;
     shellHook = attrOrDefault attrs "shellHook" "" + ''
     export EMACS_SERVER_NAME=${attrs.name}
     '';
