@@ -5,7 +5,8 @@ nixpkgs // rec {
   ifFlag = b: vals: if b then vals else [];
 
   addHaskellDevInputs = {pyDev ? false, jsDev ? false, util ? true, editors ? true,...}: attrs: attrs // (with attrs; rec {
-    buildDepends = ifFlag pyDev (with nixpkgs.python27Packages; [ python jedi elpy pip ipython ipdb ]) ++
+    buildDepends = (with allpkgs.haskellPackages; [ cabal-install ghc-mod hlint hoogle haddock stylish-haskell hasktags ]) ++
+                  ifFlag pyDev (with nixpkgs.python27Packages; [ python jedi elpy pip ipython ipdb ]) ++
                   ifFlag jsDev [ nodejs ] ++
                   ifFlag editors [ emacs vim ] ++
                   ifFlag util [ less sudo zsh fasd silver-searcher git tmux procps ] ++ (attrOrDefault attrs "buildDepends" []);
